@@ -23,6 +23,7 @@ mongoose
 // Import and use Reader and Writer models
 const Reader = require("./models/ReaderSchema");
 const Writer = require("./models/WriterSchema");
+const Genre = require("./models/GenreSchema");
 
 // Middleware for parsing JSON bodies
 app.use(bodyParser.json());
@@ -101,6 +102,17 @@ app.get("/novels", async (req, res) => {
   }
 });
 
+app.get("/novels/featured", async (req, res) => {
+  try {
+    // fetch novels having isFeatured as true
+    const novels = await Novel.find({ isFeatured: true });
+    res.status(200).json(novels);
+  } catch (error) {
+    console.error("Error fetching novels:", error);
+    res.status(500).json({ error: "An error occurred fetching novels" });
+  }
+});
+
 app.get("/writers", async (req, res) => {
   // return all writers
   try {
@@ -112,6 +124,38 @@ app.get("/writers", async (req, res) => {
   }
 });
 
+app.get("/genres", async (req, res) => {
+  // return all genres
+  try {
+    const genres = await Genre.find();
+    res.status(200).json(genres);
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    res.status(500).json({ error: "An error occurred fetching genres" });
+  }
+});
+
+app.get("/novel/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const novel = await Novel.findById(id).populate('writerid');
+    res.status(200).json(novel);
+  } catch (error) {
+    console.error("Error fetching novel:", error);
+    res.status(500).json({ error: "An error occurred fetching novel" });
+  }
+});
+
+app.get("/writer/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const writer = await Writer.findById(id);
+    res.status(200).json(writer);
+  } catch (error) {
+    console.error("Error fetching writer:", error);
+    res.status(500).json({ error: "An error occurred fetching writer" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
