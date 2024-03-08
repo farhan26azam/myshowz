@@ -6,6 +6,9 @@ const novelSchema = new mongoose.Schema({
   versionno: { type: Number, required: true },
   versioncount: { type: Number, required: true },
   versionorder: { type: Number, required: true },
+  genres: { type: [mongoose.Schema.Types.ObjectId], ref: 'Genre', required: true },
+  content: { type: String, required: true },
+  description: { type: String, required: true },
 });
 
 

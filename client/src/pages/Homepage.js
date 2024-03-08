@@ -6,7 +6,10 @@ import GenreSpotlight from "../components/home/GenreSpotlight";
 import AuthorsSpotlight from "../components/home/AuthorsSpotlight";
 import Footer from "../components/global/Footer";
 import Navbar from "../components/global/Navbar";
+import { store } from "../store";
+import Dashboard from "./Dashboard";
 const Homepage = () => {
+  const user = store();
   // useEffect(() => {
   //   const swiper = new Swiper(".mySwiper", {
   //     direction: "vertical",
@@ -26,7 +29,7 @@ const Homepage = () => {
   //   };
   // }, []);
 
-  return (
+  return user?.user?.role === "reader" ? (
     <div className="font-poppins bg-gray-100">
       <Navbar />
       <Hero />
@@ -35,9 +38,13 @@ const Homepage = () => {
       <GenreSpotlight />
       <AuthorsSpotlight />
       <Footer />
-
     </div>
-  );
+  ):
+  (
+    <div className="font-poppins bg-gray-100">
+      <Dashboard/>
+    </div>
+  )
 };
 
 export default Homepage;

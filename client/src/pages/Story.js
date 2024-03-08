@@ -61,7 +61,7 @@ const Story = () => {
       }),
     });
     const data = await response.json();
-    console.log("Feedback response: ", data)
+    console.log("Feedback response: ", data);
     if (data.error) {
       toast.error("Error submitting feedback");
     } else {
@@ -95,44 +95,46 @@ const Story = () => {
             </div>
           )}
         </div>
-        <div className="bg-gray-700 p-4 text-white rounded-lg">
-          <div className="font-bold text-2xl mb-2">Submit Review</div>
-          <form>
-            <div className="flex items-center">
-              <input
-                type="range"
-                min="0"
-                max="5"
-                step="0."
-                className="slider-thumb h-1 w-40 bg-[var(--brown)] rounded-full"
-                value={feedback}
-                onChange={handleFeedback}
-              />
-              <style jsx>{`
-                input[type="range"]::-webkit-slider-thumb {
-                  height: 16px;
-                  width: 16px;
-                  margin-top: -7px;
-                  cursor: pointer;
-                  -webkit-appearance: none;
-                  appearance: none;
-                }
+        {user?.role === "reader" && (
+          <div className="bg-gray-700 p-4 text-white rounded-lg">
+            <div className="font-bold text-2xl mb-2">Submit Review</div>
+            <form>
+              <div className="flex items-center">
+                <input
+                  type="range"
+                  min="0"
+                  max="5"
+                  step="0."
+                  className="slider-thumb h-1 w-40 bg-[var(--brown)] rounded-full"
+                  value={feedback}
+                  onChange={handleFeedback}
+                />
+                <style jsx>{`
+                  input[type="range"]::-webkit-slider-thumb {
+                    height: 16px;
+                    width: 16px;
+                    margin-top: -7px;
+                    cursor: pointer;
+                    -webkit-appearance: none;
+                    appearance: none;
+                  }
 
-                input[type="range"]::-webkit-slider-runnable-track {
-                  height: 2px;
-                  background-color: #c56f3d
-                }
-              `}</style>
-            </div>
-            <p className="text-2xl my-2">{feedback}</p>
-            <button
-              className="bg-[var(--dark-brown)] rounded-lg text-white py-2 px-4"
-              onClick={submitFeedback}
-            >
-              Submit
-            </button>
-          </form>
-        </div>
+                  input[type="range"]::-webkit-slider-runnable-track {
+                    height: 2px;
+                    background-color: #c56f3d;
+                  }
+                `}</style>
+              </div>
+              <p className="text-2xl my-2">{feedback}</p>
+              <button
+                className="bg-[var(--dark-brown)] rounded-lg text-white py-2 px-4"
+                onClick={submitFeedback}
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );

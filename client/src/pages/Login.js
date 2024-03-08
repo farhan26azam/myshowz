@@ -26,7 +26,10 @@ const Login = ({ role }) => {
 
       console.log(response.data);
 
-      setUser(response.data.user);
+      let user = response.data.user;
+      user.role = role;
+
+      setUser(user);
       setLoginError("");
       navigate("/");
     } catch (error) {

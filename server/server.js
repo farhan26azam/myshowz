@@ -173,6 +173,44 @@ app.post("/novel/feedback", async (req, res) => {
     .catch((error) => res.status(500).json({ error: error.message }));
 });
 
+// get novels by name
+app.get("/novels/search/:name", async (req, res) => {
+  const { name } = req.params;
+  try {
+    const novels = await Novel.find(
+      { name: { $regex: new RegExp(name, "i") } }
+    )
+    res.status(200).json(novels);
+  } catch (error) {
+    console.error("Error fetching novels:", error);
+    res.status(500).json({ error: "An error occurred fetching novels" });
+  }
+});
+
+// Writer APIs
+app.get("/novels/:writerid", async (req, res) => {
+  const { writerid } = req.params;
+  try {
+    const novels  = await Novel.find(
+      { writerid }
+    )
+    res.status(200).json(novels);
+  } catch (error) {
+    console.error("Error fetching novels:", error);
+    res.status(500).json({ error: "An error occurred fetching novels" });
+  }
+});
+
+app.post("/novel", async (req, res) => {
+  const novelData = req.body;
+  console.log("Novel data:", novelData)
+  const newNovel = new Novel(novelData);
+  newNovel
+    .save()
+    .then(() => res.status(201).json({ message: "Novel created successfully" }))
+    .catch((error) => res.status(500).json({ error: error.message }));
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

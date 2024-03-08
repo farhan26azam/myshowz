@@ -1,7 +1,7 @@
 import logo from "../../assets/logo.png";
-import { store } from "../../store";
 import { useNavigate } from "react-router-dom";
-const Navbar = () => {
+import { store } from "../../store";
+const WriterNavbar = () => {
   const user = store;
   const navigate = useNavigate();
   const {setUser} = store();
@@ -105,4 +105,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default WriterNavbar;
