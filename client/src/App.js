@@ -2,11 +2,13 @@ import HomePage from "./pages/Homepage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./pages/Auth";import Stories from "./pages/Stories";
 import Story from "./pages/Story";
-;
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route exact path="/" element={<HomePage/>} />
         <Route path="/stories" element={<Stories/>} />

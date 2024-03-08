@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { store } from "../store";
-import logo from "../assets/logo.png";
-import axios from "axios";
-import { url } from "../utils";
-
+import React from "react";
 import Hero from "../components/home/Hero";
 import Novels from "../components/home/Novels";
 import FeaturesStories from "../components/home/FeaturedStories";

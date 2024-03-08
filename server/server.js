@@ -24,6 +24,7 @@ mongoose
 const Reader = require("./models/ReaderSchema");
 const Writer = require("./models/WriterSchema");
 const Genre = require("./models/GenreSchema");
+const Feedback = require("./models/FeedbackSchema");
 
 // Middleware for parsing JSON bodies
 app.use(bodyParser.json());
@@ -138,7 +139,7 @@ app.get("/genres", async (req, res) => {
 app.get("/novel/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const novel = await Novel.findById(id).populate('writerid');
+    const novel = await Novel.findById(id);
     res.status(200).json(novel);
   } catch (error) {
     console.error("Error fetching novel:", error);
@@ -156,6 +157,22 @@ app.get("/writer/:id", async (req, res) => {
     res.status(500).json({ error: "An error occurred fetching writer" });
   }
 });
+
+app.post("/novel/feedback", async (req, res) => {
+  const { feedback, readerid, novelid, writerid } = req.body;
+  const existingFeedback = await Feedback
+    .findOne({ readerid, novelid, writerid });
+  if (existingFeedback) {
+    return res.status(400).json({ error: "Feedback already exists" });
+  }
+  const newFeedback = new Feedback({ feedback, readerid, novelid, writerid});
+
+  newFeedback
+    .save()
+    .then(() => res.status(201).json({ message: "Feedback added successfully" }))
+    .catch((error) => res.status(500).json({ error: error.message }));
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

@@ -1,7 +1,7 @@
 const NovelCard = ({ novel }) => {
   return (
     <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
-      <a href="/">
+      <a href={`/story/${novel._id}`}>
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           {novel?.title || "Title"}
         </h5>
