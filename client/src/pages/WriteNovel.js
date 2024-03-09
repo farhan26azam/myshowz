@@ -72,10 +72,12 @@ const WriteNovel = () => {
     if (!validateNovel()) return;
     const response = await axios.post(`${url}/novel`, novelData);
     console.log(response)
-    if (response.status >= 200 && response.status < 300) {
+    if (response.status === 201) {
       toast.success("Novel submitted successfully");
       navigate("/");
-    } else {
+    } else if(response.status === 202){
+      toast.error("Error submitting novel" + response.data.error);
+    } else{
       toast.error("Error submitting novel" + response.error);
     }
 

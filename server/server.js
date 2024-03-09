@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Routes for signup and login
-app.post("/signup",async (req, res) => {
+app.post("/signup", async (req, res) => {
   const { role, ...userData } = req.body;
   console.log("role", role);
   if (role === "reader") {
@@ -48,11 +48,11 @@ app.post("/signup",async (req, res) => {
     const newWriter = new Writer(userData);
 
     const highestIdWriter = await Writer.findOne().sort({ id: -1 });
-    
+
     const newId = highestIdWriter ? highestIdWriter.id + 1 : 1;
 
     newWriter.id = newId;
-    
+
     newWriter
       .save()
       .then(() =>
@@ -160,16 +160,21 @@ app.get("/writer/:id", async (req, res) => {
 
 app.post("/novel/feedback", async (req, res) => {
   const { feedback, readerid, novelid, writerid } = req.body;
-  const existingFeedback = await Feedback
-    .findOne({ readerid, novelid, writerid });
+  const existingFeedback = await Feedback.findOne({
+    readerid,
+    novelid,
+    writerid,
+  });
   if (existingFeedback) {
     return res.status(400).json({ error: "Feedback already exists" });
   }
-  const newFeedback = new Feedback({ feedback, readerid, novelid, writerid});
+  const newFeedback = new Feedback({ feedback, readerid, novelid, writerid });
 
   newFeedback
     .save()
-    .then(() => res.status(201).json({ message: "Feedback added successfully" }))
+    .then(() =>
+      res.status(201).json({ message: "Feedback added successfully" })
+    )
     .catch((error) => res.status(500).json({ error: error.message }));
 });
 
@@ -177,9 +182,9 @@ app.post("/novel/feedback", async (req, res) => {
 app.get("/novels/search/:name", async (req, res) => {
   const { name } = req.params;
   try {
-    const novels = await Novel.find(
-      { name: { $regex: new RegExp(name, "i") } }
-    )
+    const novels = await Novel.find({
+      title: { $regex: new RegExp(name, "i") },
+    });
     res.status(200).json(novels);
   } catch (error) {
     console.error("Error fetching novels:", error);
@@ -191,9 +196,7 @@ app.get("/novels/search/:name", async (req, res) => {
 app.get("/novels/:writerid", async (req, res) => {
   const { writerid } = req.params;
   try {
-    const novels  = await Novel.find(
-      { writerid }
-    )
+    const novels = await Novel.find({ writerid });
     res.status(200).json(novels);
   } catch (error) {
     console.error("Error fetching novels:", error);
@@ -203,14 +206,18 @@ app.get("/novels/:writerid", async (req, res) => {
 
 app.post("/novel", async (req, res) => {
   const novelData = req.body;
-  console.log("Novel data:", novelData)
+  const { title, versionno } = novelData;
+  const existingNovel = await Novel.findOne({ title, versionno });
+  if (existingNovel) {
+    return res.status(202).json({ error: "Novel already exists" });
+  }
+  console.log("Novel data:", novelData);
   const newNovel = new Novel(novelData);
   newNovel
     .save()
     .then(() => res.status(201).json({ message: "Novel created successfully" }))
     .catch((error) => res.status(500).json({ error: error.message }));
 });
-
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
