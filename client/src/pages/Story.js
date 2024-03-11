@@ -95,7 +95,7 @@ const Story = () => {
             </div>
           )}
         </div>
-        {user?.role === "reader" && (
+        {user?.user?.role === "reader" && (
           <div className="bg-gray-700 p-4 text-white rounded-lg">
             <div className="font-bold text-2xl mb-2">Submit Review</div>
             <form>
