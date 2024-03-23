@@ -219,6 +219,32 @@ app.post("/novel", async (req, res) => {
     .catch((error) => res.status(500).json({ error: error.message }));
 });
 
+app.put("/user", async (req, res) => {
+  console.log("request body: " , req?.body);
+  const { role, ...userData } = req.body;
+  if (role === "reader") {
+    try {
+      await Reader.findOneAndUpdate({ _id: userData._id }, { email: userData.email });
+      res.status(200).json({ message: "Reader email updated successfully" });
+    } catch (error) {
+      console.error("Error updating reader email:", error);
+      res.status(500).json({ error: "An error occurred while updating reader email" });
+    }
+  } else if (role === "writer") {
+    try {
+      await Writer.findOneAndUpdate({ _id: userData._id }, { email: userData.email });
+      res.status(200).json({ message: "Writer email updated successfully" });
+    } catch (error) {
+      console.error("Error updating writer email:", error);
+      res.status(500).json({ error: "An error occurred while updating writer email" });
+    }
+  } else {
+    res.status(400).json({ error:`${role} is invalid` });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+

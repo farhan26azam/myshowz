@@ -5,6 +5,7 @@ import Story from "./pages/Story";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import WriteNovel from "./pages/WriteNovel";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/story/:id" element={<Story/>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/write/new" element={<WriteNovel />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

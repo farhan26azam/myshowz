@@ -15,6 +15,7 @@ code {
 :root{
   --brown: rgb(197, 111, 61);
   --dark-brown: rgb(139, 69, 19);
+  --light-brown: rgb(247, 187, 142);
 }
 
 @font-face {
