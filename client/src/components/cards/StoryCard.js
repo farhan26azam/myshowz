@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 const StoryCard = ({ story }) => {
-  console.log("story:", story);
   return (
     <Link
       to={`/story/${story._id}`}

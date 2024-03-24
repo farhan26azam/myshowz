@@ -88,11 +88,11 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href="/"
+                href={`/stories?featured=true`}
                 className="block py-2 px-3 text-white"
                 aria-current="page"
               >
-                Contact
+                Featured Stories
               </a>
             </li>
             {user && (

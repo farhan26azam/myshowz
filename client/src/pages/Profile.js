@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { store } from "../store";
 import { useNavigate } from "react-router-dom";
 import {toast} from "react-toastify";
@@ -7,7 +7,6 @@ import axios from "axios";
 
 const Profile = () => {
   const user = store().user;
-  const [previewPic, setPreviewPic] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
@@ -21,16 +20,6 @@ const Profile = () => {
     setProfileData({ ...profileData, [name]: value });
   };
 
-  const previewPicture = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewPic(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
 
   const updateProfile = async () => {
     const response = await axios.put(`${url}/user`, profileData);
@@ -50,6 +39,10 @@ const Profile = () => {
   const goToHome = () => {
     navigate("/");
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   return (
     <div>
@@ -90,13 +83,7 @@ const Profile = () => {
             </div>
           )}
         </div>
-        <div>
-          <img
-            id="preview-picture"
-            src={previewPic}
-            className="w-32 h-32 rounded-full"
-          />
-        </div>
+
 
         {!isFormVisible && (
           <div id="profile-preview" className="mt-8">
@@ -112,6 +99,13 @@ const Profile = () => {
             <p className="mt-2">
               <strong>Email:</strong> {profileData.email}
             </p>
+            {
+              profileData.role === "writer" && (
+                <p>
+                  <strong>Score:</strong> {user.score}
+                </p>
+              )
+            }
             <button
               type="button"
               onClick={editProfile}

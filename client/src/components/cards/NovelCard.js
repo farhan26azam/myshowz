@@ -10,7 +10,7 @@ const NovelCard = ({ novel }) => {
         {novel?.description || "Description"}
       </p>
       <a
-        href="/"
+        href={`/story/${novel._id}`}
         className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-[var(--brown)] rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300"
       >
         Read more

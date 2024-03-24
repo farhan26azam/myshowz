@@ -10,24 +10,6 @@ import { store } from "../store";
 import Dashboard from "./Dashboard";
 const Homepage = () => {
   const user = store();
-  // useEffect(() => {
-  //   const swiper = new Swiper(".mySwiper", {
-  //     direction: "vertical",
-  //     pagination: {
-  //       el: ".swiper-pagination",
-  //       clickable: true,
-  //     },
-  //     autoplay: {
-  //       delay: 2500,
-  //       disableOnInteraction: false,
-  //     },
-  //   });
-
-  //   // Clean up Swiper instance on unmount
-  //   return () => {
-  //     swiper.destroy();
-  //   };
-  // }, []);
 
   return user?.user?.role === "reader" ? (
     <div className="font-poppins bg-gray-100">

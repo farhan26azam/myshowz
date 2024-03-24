@@ -9,7 +9,7 @@ const WriterCard = ({ writer }) => {
         <h5 className="mb-1 text-xl font-medium text-white">{writer?.name || "Name"}</h5>
         <span className="text-sm text-gray-300">{writer?.email || "Email"}</span>
         <div className="flex mt-4 md:mt-6">
-            <a href="/" className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-[var(--brown)] rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300">Read Stories</a>
+            <a href={`/stories?author=${writer._id}`} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-[var(--brown)] rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300">Read Stories</a>
         </div>
     </div>
 </div>
