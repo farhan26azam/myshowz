@@ -24,7 +24,7 @@ const Profile = () => {
   const updateProfile = async () => {
     const response = await axios.put(`${url}/user`, profileData);
     console.log(response);
-    if(response.status==200){
+    if(response.status===200){
         toast.success("Profile updated successfully");
     }else{
         toast.error("Error updating profile");

@@ -13,10 +13,10 @@ const WriteNovel = () => {
   const [novelData, setNovelData] = useState({
     versioncount: 1,
     versionno: 1,
-    title: "Echoes",
+    title: "Title",
     versionorder: 1,
-    content: "aoreboirgbpqwigbpw",
-    description: "qeiurgbierpgq",
+    content: "Write your story here",
+    description: "Short Overview",
     genres: [],
     writerid: user.user._id,
     isFeatured: false,

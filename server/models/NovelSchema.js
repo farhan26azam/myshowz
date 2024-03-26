@@ -12,4 +12,6 @@ const novelSchema = new mongoose.Schema({
 });
 
 
+
+
 module.exports = mongoose.model("Novel", novelSchema);

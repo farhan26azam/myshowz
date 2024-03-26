@@ -7,7 +7,7 @@ const Signup = ({ role }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [favoriteGenera, setFavoriteGenre] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e) => {
@@ -22,14 +22,14 @@ const Signup = ({ role }) => {
       console.error("All fields are required");
       return;
     }
-    if(role === "reader" && !username) {
+    if(role === "reader" && !password) {
       console.error("All fields are required");
       return;
     }
     try {
       let userData;
       if (role === "reader") {
-        userData = { name, email, password, username, role };
+        userData = { name, email, password, favoriteGenera, role };
       } else if (role === "writer") {
         userData = { name, email, password, score:0, skills: [""], role };
       }
@@ -93,22 +93,26 @@ const Signup = ({ role }) => {
         />
       </div>
       {role === "reader" && (
-        <div className="p-3 pb-0">
-          <label
-            htmlFor="username"
-            className="block text-lg font-medium text-white px-1"
-          >
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[var(--dark-brown)] focus:ring-opacity-50 p-2"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-      )}
+  <div className="p-3 pb-0">
+    <label htmlFor="favoriteGenre" className="block text-lg font-medium text-white px-1">
+      Favorite Genre
+    </label>
+    <select
+      id="favoriteGenre"
+      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[var(--dark-brown)] focus:ring-opacity-50 p-2"
+      value={favoriteGenera}
+      onChange={(e) => setFavoriteGenre(e.target.value)}
+    >
+      <option value="">Select a Genre</option>
+      <option value="adventure">Adventure</option>
+      <option value="mystery">Mystery</option>
+      <option value="exploration">Exploration</option>
+      <option value="suspense">Suspense</option>
+      <option value="thriller">Thriller</option>
+      <option value="quest">Quest</option>
+    </select>
+  </div>
+)}
       <div className="p-3 pb-0">
         <label
           htmlFor="confirmPassword"

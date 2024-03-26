@@ -27,3 +27,5 @@ const writerSchema = new mongoose.Schema({
 const Writer = mongoose.model('Writer', writerSchema);
 
 module.exports = Writer;
+
+
