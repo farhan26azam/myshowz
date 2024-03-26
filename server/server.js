@@ -169,7 +169,14 @@ app.post("/novel/feedback", async (req, res) => {
     return res.status(400).json({ error: "Feedback already exists" });
   }
   const newFeedback = new Feedback({ feedback, readerid, novelid, writerid });
-
+  
+  Writer.findOne({ _id: writerid }).then((writer) => {
+    // update writers score to the average of previous score and current feedback
+    newScore = (parseInt(feedback) + writer.score)/2;
+    Writer.updateOne({ _id: writerid }, { score: newScore }).then(() =>
+      console.log("Writer score updated successfully")
+    );
+  });
   newFeedback
     .save()
     .then(() =>
