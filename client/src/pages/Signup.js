@@ -13,7 +13,9 @@ const Signup = ({ role }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    
     // Check if all required fields are provided based on the selected role
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
     if (
       !name ||
       !email ||
@@ -22,10 +24,22 @@ const Signup = ({ role }) => {
       console.error("All fields are required");
       return;
     }
-    if(role === "reader" && !password) {
+    if(role === "reader" && !favoriteGenera) {
       console.error("All fields are required");
       return;
     }
+      // Check if passwords match
+  if (password !== confirmPassword) {
+    console.error("Passwords do not match");
+    return;
+  }
+
+  // Check if password meets complexity requirements
+  if (!passwordRegex.test(password)) {
+    console.error("Password must have at least 8 characters with one or more special characters and one or more capital letters");
+    return;
+  }
+  
     try {
       let userData;
       if (role === "reader") {
