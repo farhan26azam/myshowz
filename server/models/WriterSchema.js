@@ -11,6 +11,18 @@ const writerSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  phone: {
+    type: String,
+  },
+  age: {
+    type: Number,
+  },
+  gender: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
   password: {
     type: String,
     required: true,

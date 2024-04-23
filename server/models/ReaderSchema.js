@@ -11,6 +11,18 @@ const readerSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  phone: {
+    type: String,
+  },
+  age: {
+      type: Number,
+  },
+  gender: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
   favoriteGenera: {
     type: String,
     required: true,

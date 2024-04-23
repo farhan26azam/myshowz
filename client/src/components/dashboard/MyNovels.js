@@ -15,6 +15,7 @@ const MyNovels = () => {
     try {
       const response = await axios.get(`${url}/novels/${user?.user?._id}`);
       setNovels(response?.data);
+      console.log(response?.data);
     } catch (error) {
       console.error(error);
     }

@@ -1,16 +1,29 @@
 import logo from "../../assets/logo.png";
 import { store } from "../../store";
 import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {Avatar, Button, Menu, MenuItem} from "@mui/material";
 const Navbar = () => {
-  const user = store;
+  // const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem('user')) || null
   const navigate = useNavigate();
   const { setUser } = store();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  const handeLogout = () => {
+  const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    handleClose();
     navigate("/auth");
   };
+
   return (
     <nav className="bg-[var(--brown)] fixed w-full z-20 top-0 start-0 border-b h-24">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -30,13 +43,44 @@ const Navbar = () => {
               Get started
             </button>
           ) : (
-            <button
-              onClick={handeLogout}
-              type="button"
-              className="text-white bg-[var(--dark-brown)] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center"
-            >
-              Log out
-            </button>
+              <div className="flex gap-4">
+                <Button
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                    sx={{
+                      fontFamily: 'Poppins',
+                      fontWeight: 800,
+                        fontSize: '1rem',
+                      color: 'white',
+                      backgroundColor: 'var(--dark-brown)',
+                      paddingX: '20px'
+                    }}
+                >
+                  {user?.name}
+                </Button>
+
+                <Avatar alt={user?.name} src={user?.image || ''} sx={{width: 50, height: 50}} onClick={handleClick} />
+
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                >
+                  <MenuItem onClick={
+                    () => {
+                      handleClose();
+                      navigate("/profile")
+                    }
+                  }>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
           )}
           <button
             data-collapse-toggle="navbar-sticky"

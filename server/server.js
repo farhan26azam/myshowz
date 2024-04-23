@@ -173,7 +173,11 @@ app.post("/novel/feedback", async (req, res) => {
   
   Writer.findOne({ _id: writerid }).then((writer) => {
     // update writers score to the average of previous score and current feedback
-    newScore = (parseInt(feedback) + writer.score)/2;
+    if (writer.score === 0 || writer.score === null){
+        newScore = parseInt(feedback);
+    }else{
+      newScore = (parseInt(feedback) + writer.score)/2;
+    }
     Writer.updateOne({ _id: writerid }, { score: newScore }).then(() =>
       console.log("Writer score updated successfully")
     );
@@ -246,6 +250,19 @@ app.post("/novel", async (req, res) => {
   }
 });
 
+app.delete("/novel/:id", async (req, res) => {
+      const {id} = req.params;
+      try {
+        await Novel.findByIdAndDelete(id);
+        res.status(200).json({message: "Novel deleted successfully"});
+      } catch (error) {
+        console.error("Error deleting novel:", error);
+        res.status(500).json({error: "An error occurred deleting novel"});
+      }
+    }
+);
+
+
 async function sendEmailToReaders(emails) {
   try {
     // Assuming you have already defined the transporter
@@ -280,7 +297,8 @@ app.put("/user", async (req, res) => {
   const { role, ...userData } = req.body;
   if (role === "reader") {
     try {
-      await Reader.findOneAndUpdate({ _id: userData._id }, { email: userData.email });
+      await Reader.findOneAndUpdate({ _id: userData._id },
+        { name: userData.name, email: userData.email, phone: userData.phone, age: userData.age, bio:userData.bio, gender: userData.gender });
       res.status(200).json({ message: "Reader email updated successfully" });
     } catch (error) {
       console.error("Error updating reader email:", error);
@@ -288,7 +306,8 @@ app.put("/user", async (req, res) => {
     }
   } else if (role === "writer") {
     try {
-      await Writer.findOneAndUpdate({ _id: userData._id }, { email: userData.email });
+      await Writer.findOneAndUpdate({ _id: userData._id }, { name: userData.name, email: userData.email, phone: userData.phone, age: userData.age, bio:userData.bio, gender: userData.gender });
+
       res.status(200).json({ message: "Writer email updated successfully" });
     } catch (error) {
       console.error("Error updating writer email:", error);
