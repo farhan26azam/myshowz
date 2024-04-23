@@ -1,7 +1,6 @@
 import React from "react";
 import Hero from "../components/home/Hero";
 import Novels from "../components/home/Novels";
-import FeaturesStories from "../components/home/FeaturedStories";
 import GenreSpotlight from "../components/home/GenreSpotlight";
 import AuthorsSpotlight from "../components/home/AuthorsSpotlight";
 import Footer from "../components/global/Footer";
@@ -16,7 +15,6 @@ const Homepage = () => {
       <Navbar />
       <Hero />
       <Novels />
-      <FeaturesStories />
       <GenreSpotlight />
       <AuthorsSpotlight />
       <Footer />
