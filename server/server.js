@@ -273,6 +273,24 @@ const { id } = req.params;
   }
 });
 
+app.post("/like", async (req, res) => {
+    const { readerid, novelid } = req.body;
+    try {
+        const novel = await Novel.findById(novelid);
+        if (!novel.likes.includes(readerid)) {
+        novel.likes.push(readerid);
+        await novel.save();
+        res.status(200).json({ message: "Liked successfully" });
+        } else {
+        res.status(202).json({ error: "Already liked" });
+        }
+    } catch (error) {
+        console.error("Error liking novel:", error);
+        res.status(500).json({ error: "An error occurred liking novel" });
+    }
+
+});
+
 async function sendEmailToReaders(emails) {
   try {
     // Assuming you have already defined the transporter

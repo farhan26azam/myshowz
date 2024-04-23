@@ -9,6 +9,7 @@ const novelSchema = new mongoose.Schema({
   genres: { type: [mongoose.Schema.Types.ObjectId], ref: 'Genre', required: true },
   content: { type: String, required: true },
   description: { type: String, required: true },
+  likes: { type: [mongoose.Schema.Types.ObjectId], ref: 'Like' },
 });
 
 

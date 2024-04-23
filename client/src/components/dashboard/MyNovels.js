@@ -10,6 +10,7 @@ const MyNovels = () => {
   const user = store();
   const [novels, setNovels] = useState([]);
   const navigate = useNavigate();
+  const [sort, setSort] = useState("latest");
 
   const getNovels = async () => {
     try {
@@ -25,9 +26,28 @@ const MyNovels = () => {
     getNovels();
   }, []);
 
+  useEffect(() => {
+    if(sort === "latest") {
+      setNovels(novels.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    } else if(sort==="likes") {
+        setNovels(novels.sort((a, b) => b.likes.length - a.likes.length));
+    }
+  }, [sort]);
+
   return (
     <div className="py-10">
+
       <h1 className="text-3xl font-bold my-2">My Novels</h1>
+      <div className="flex items-center my-4">
+        <p>Sort by:</p>
+        <select
+          className="border-[var(--dark-brown)] border-2 rounded-lg p-2 ml-2 bg-[var(--brown)] text-white"
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="latest">Latest</option>
+          <option value="likes">Likes</option>
+        </select>
+      </div>
       <div className="grid grid-cols-3 gap-4">
         <div
           className="shadow-md shadow-black p-4 text-black rounded-lg h-96 w-full flex flex-col justify-center items-center cursor-pointer"

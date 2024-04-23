@@ -4,7 +4,7 @@ const StoryCard = ({ story }) => {
   return (
     <Link
       to={`/story/${story._id}`}
-      className="p-4 rounded-lg bg-gray-200 shadow-md shadow-black"
+      className="p-4 rounded-lg bg-brown-200 bg-opacity-25 shadow-md shadow-black"
     >
       <h2 className="text-2xl font-bold">{story.title}</h2>
       <p className="mt-2 text-gray-600 font-bold">{story.description}</p>

@@ -5,7 +5,7 @@ import {useState} from "react";
 import {Avatar, Button, Menu, MenuItem} from "@mui/material";
 const Navbar = () => {
   // const user = localStorage.getItem("user");
-  const user = JSON.parse(localStorage.getItem('user')) || null
+  const user = JSON.parse(localStorage.getItem('user')) || null;
   const navigate = useNavigate();
   const { setUser } = store();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -128,15 +128,6 @@ const Navbar = () => {
                 aria-current="page"
               >
                 Stories
-              </a>
-            </li>
-            <li>
-              <a
-                href={`/stories?featured=true`}
-                className="block py-2 px-3 text-white"
-                aria-current="page"
-              >
-                Featured Stories
               </a>
             </li>
             {user && (
