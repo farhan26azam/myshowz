@@ -11,10 +11,9 @@ const readerSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  username: {
+  favoriteGenera: {
     type: String,
     required: true,
-    unique: true
   },
   password: {
     type: String,

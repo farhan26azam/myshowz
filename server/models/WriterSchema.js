@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const writerSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,3 +28,5 @@ const writerSchema = new mongoose.Schema({
 const Writer = mongoose.model('Writer', writerSchema);
 
 module.exports = Writer;
+
+

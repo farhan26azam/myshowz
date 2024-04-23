@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const nodemailer = require('nodemailer');
 const cors = require("cors"); // Import cors package
 
 const app = express();
@@ -213,18 +214,66 @@ app.get("/novels/:writerid", async (req, res) => {
 
 app.post("/novel", async (req, res) => {
   const novelData = req.body;
-  const { title, versionno } = novelData;
+  const { title, versionno, genres } = novelData;
+
   const existingNovel = await Novel.findOne({ title, versionno });
   if (existingNovel) {
     return res.status(202).json({ error: "Novel already exists" });
   }
-  console.log("Novel data:", novelData);
+
   const newNovel = new Novel(novelData);
-  newNovel
-    .save()
-    .then(() => res.status(201).json({ message: "Novel created successfully" }))
-    .catch((error) => res.status(500).json({ error: error.message }));
+
+  try {
+    await newNovel.save();
+
+    // Iterate over each genre
+    for (let genreObj of genres) {
+      const genre = genreObj.genre;
+
+      // Find readers subscribed to the current genre
+      const readers = await Reader.find({ favoriteGenera: genre }, 'email');
+
+      // Extract emails from readers
+      const readerEmails = readers.map(reader => reader.email);
+
+      // Send email to readers
+      await sendEmailToReaders(readerEmails);
+    }
+
+    res.status(201).json({ message: "Novel created successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
+
+async function sendEmailToReaders(emails) {
+  try {
+    // Assuming you have already defined the transporter
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: 'zohaibrana969@gmail.com',
+        pass: 'bwvh xvhq afis ehel',
+      },
+    });
+
+    let mail = await transporter.sendMail({
+      from: '"TaleCrafters" <zohaibrana969@gmail.com>',
+      to: emails.join(','), // Corrected syntax with template literal
+      subject: 'New Novel Uploaded of your interest!',
+      text: 'Dear,\n\nYou have been notified that new novel upload on TaleCrafters that matches your favorite Genera.\n\nThank you for your commitment.\n\nSincerely,\nThe TaleCrafter Team',
+    });
+
+    console.log('Mail sent successfully:', mail);
+  } catch (error) {
+    console.error('Error sending mail:', error);
+  }
+}
+
+
 
 app.put("/user", async (req, res) => {
   console.log("request body: " , req?.body);
