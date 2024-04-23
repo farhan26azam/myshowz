@@ -17,6 +17,7 @@ function App() {
         <Route path="/story/:id" element={<Story/>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/write/new" element={<WriteNovel />} />
+          <Route path="/write/:id" element={<WriteNovel />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>

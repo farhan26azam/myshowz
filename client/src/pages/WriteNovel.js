@@ -4,9 +4,11 @@ import { store } from "../store";
 import { url } from "../utils";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const WriteNovel = () => {
+  // get id from params
+  const { id } = useParams();
   const user = store();
   const navigate = useNavigate();
   const [genres, setGenres] = useState([]);
@@ -21,6 +23,17 @@ const WriteNovel = () => {
     writerid: user.user._id,
     isFeatured: false,
   });
+
+  const getNovel = async () => {
+    const response = await axios.get(`${url}/novel/${id}`);
+    setNovelData(response.data);
+  };
+
+  useEffect(() => {
+    if(id){
+      getNovel();
+    }
+  },[id]);
 
   const getGenres = async () => {
     const response = await fetch(`${url}/genres`);
@@ -70,15 +83,30 @@ const WriteNovel = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateNovel()) return;
-    const response = await axios.post(`${url}/novel`, novelData);
-    console.log(response)
-    if (response.status === 201) {
-      toast.success("Novel submitted successfully");
-      navigate("/");
-    } else if(response.status === 202){
-      toast.error("Error submitting novel" + response.data.error);
-    } else{
-      toast.error("Error submitting novel" + response.error);
+    let response;
+    if(id){
+        response = await axios.put(`${url}/novel/${id}`, novelData);
+    }else{
+        response = await axios.post(`${url}/novel`, novelData);
+    }
+    if(id){
+      if (response.status === 200) {
+        toast.success("Novel edited successfully");
+        navigate("/");
+      } else if(response.status === 202){
+        toast.error("Error editing novel" + response.data.error);
+      } else{
+        toast.error("Error editing novel" + response.error);
+      }
+    }else{
+        if (response.status === 201) {
+            toast.success("Novel updated successfully");
+            navigate("/");
+        } else if(response.status === 202){
+            toast.error("Error updating novel" + response.data.error);
+        } else{
+            toast.error("Error updating novel" + response.error);
+        }
     }
 
   };
@@ -145,8 +173,8 @@ const WriteNovel = () => {
                         name={genre?.genre}
                         type="checkbox"
                         className="form-checkbox h-5 w-5 text-[#c56f3d]"
-                        onChange={() => handleGenreChange(genre)}
-                        checked={novelData.genres.includes(genre)}
+                        onChange={() => handleGenreChange(id ? genre._id: genre)}
+                        checked={novelData.genres.includes(id ? genre._id:genre)}
                       />
                       <span className="ml-2 text-sm">{genre?.genre}</span>
                     </label>

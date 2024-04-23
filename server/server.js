@@ -262,6 +262,16 @@ app.delete("/novel/:id", async (req, res) => {
     }
 );
 
+app.put("/novel/:id", async (req, res) => {
+const { id } = req.params;
+  const novelData = req.body;
+  try {
+    await Novel.findOneAndUpdate({ _id: id }, novelData);
+    res.status(200).json({ message: "Novel updated successfully" });
+    } catch (error) {
+    console.error("Error updating novel:", error);
+  }
+});
 
 async function sendEmailToReaders(emails) {
   try {
