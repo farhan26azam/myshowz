@@ -22,6 +22,7 @@ const WriteNovel = () => {
     genres: [],
     writerid: user.user._id,
     isFeatured: false,
+    active: true
   });
 
   const getNovel = async () => {
@@ -85,9 +86,9 @@ const WriteNovel = () => {
     if (!validateNovel()) return;
     let response;
     if(id){
-        response = await axios.put(`${url}/novel/${id}`, novelData);
+        response = await axios.put(`${url}/novel/${id}`, {...novelData, active: true});
     }else{
-        response = await axios.post(`${url}/novel`, novelData);
+        response = await axios.post(`${url}/novel`, {...novelData, active: true});
     }
     if(id){
       if (response.status === 200) {
@@ -111,11 +112,33 @@ const WriteNovel = () => {
 
   };
 
+  const handleSave = async (e) => {
+    // save with active false
+    e.preventDefault();
+    if (!validateNovel()) return;
+    let response;
+    if(id) {
+      response = await axios.put(`${url}/novel/${id}`, {...novelData, active: false});
+    } else {
+      response = await axios.post(`${url}/novel`, {...novelData, active: false});
+    }
+    if(id) {
+      if (response.status === 200) {
+        toast.success("Novel saved successfully");
+        navigate("/");
+      } else if (response.status === 202) {
+        toast.error("Error saving novel" + response.data.error);
+      } else {
+        toast.error("Error saving novel" + response.error);
+      }
+    }
+  }
+
   return (
     <>
       <WriterNavbar />
       <div className="container mx-auto mt-24">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mx-20 py-10">
           {/* Left Sidebar */}
           <div className="md:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -230,13 +253,24 @@ const WriteNovel = () => {
             </div>
           </div>
         </div>
-        {/* Submit Button */}
+        {/* Save Button*/}
         <div className="text-center mt-8">
+          <button
+              onClick={
+                    handleSave
+              }
+            className="bg-white text-[var(--brown)] border-2 border-[var(--brown)] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Save Draft
+          </button>
+        </div>
+        {/* Submit Button */}
+        <div className="text-center mt-2">
           <button
             onClick={handleSubmit}
             className="bg-[var(--brown)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Submit
+            Publish
           </button>
         </div>
       </div>

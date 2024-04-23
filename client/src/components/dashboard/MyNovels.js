@@ -41,7 +41,7 @@ const MyNovels = () => {
       <div className="flex items-center my-4">
         <p>Sort by:</p>
         <select
-          className="border-[var(--dark-brown)] border-2 rounded-lg p-2 ml-2 bg-[var(--brown)] text-white"
+          className="border-[var(--dark-brown)] border-2 rounded-lg p-2 ml-2 bg-[var(--brown)] text-white px-4"
           onChange={(e) => setSort(e.target.value)}
         >
           <option value="latest">Latest</option>

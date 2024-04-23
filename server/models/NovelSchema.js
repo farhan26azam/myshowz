@@ -10,6 +10,7 @@ const novelSchema = new mongoose.Schema({
   content: { type: String, required: true },
   description: { type: String, required: true },
   likes: { type: [mongoose.Schema.Types.ObjectId], ref: 'Like' },
+  active: { type: Boolean, required: true },
 });
 
 
