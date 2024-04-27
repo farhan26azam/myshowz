@@ -4,6 +4,7 @@ import { url } from "../utils";
 import Navbar from "../components/global/Navbar";
 import { store } from "../store";
 import { toast } from "react-toastify";
+import {ArrowForwardIos} from "@mui/icons-material";
 
 const Story = () => {
   const { id } = useParams();
@@ -11,12 +12,14 @@ const Story = () => {
   const [story, setStory] = useState({});
   const [author, setAuthor] = useState({});
   const [feedback, setFeedback] = useState(0);
+  const [versions, setVersions] = useState([]);
 
   const fetchStory = async () => {
     const response = await fetch(`${url}/novel/${id}`);
     const data = await response.json();
     console.log("Story data: ", data);
     setStory(data);
+    setVersions(data.versions);
   };
 
   useEffect(() => {
@@ -79,9 +82,29 @@ const Story = () => {
       <div className="mt-24 mb-12">
         <div className="py-4">
           <h1 className="text-3xl font-bold text-center">{story.title}</h1>
+          <p className="text-xl font-bold text-center">Version: {story.versionno}</p>
         </div>
         <div className="mx-12">
-          <p>{story.content}</p>
+        <p>{story.content}</p>
+        </div>
+        {story?.next && <div className="w-full flex justify-center">
+          <a className="bg-[var(--brown)] p-2 text-white font-bold rounded-lg" href={`/story/${story.next}`}>Next Version
+
+            <ArrowForwardIos/>
+          </a>
+        </div>}
+      </div>
+      <div>
+        <div className="bg-[var(--brown)] w-full grid grid-cols-2 py-4 px-10">
+            <div className="text-white">
+                <span className="font-bold text-2xl">About the story</span>
+                <p>{story.description}</p>
+            </div>
+            <div className="text-white">
+                <span className="font-bold text-2xl">Story details</span>
+
+                <p>Likes: {story?.likes?.length}</p>
+            </div>
         </div>
       </div>
       <div className="bg-[var(--brown)] w-full grid grid-cols-2 py-4 px-10">

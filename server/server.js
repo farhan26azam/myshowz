@@ -142,6 +142,7 @@ app.get("/novel/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const novel = await Novel.findById(id);
+
     res.status(200).json(novel);
   } catch (error) {
     console.error("Error fetching novel:", error);

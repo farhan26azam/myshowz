@@ -11,6 +11,7 @@ const novelSchema = new mongoose.Schema({
   description: { type: String, required: true },
   likes: { type: [mongoose.Schema.Types.ObjectId], ref: 'Like' },
   active: { type: Boolean, required: true },
+  next: { type: mongoose.Schema.Types.ObjectId, ref: 'Novel' },
 });
 
 
