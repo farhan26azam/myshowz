@@ -96,7 +96,8 @@ app.post("/login", async (req, res) => {
 app.get("/novels", async (req, res) => {
   // return all novels
   try {
-    const novels = await Novel.find();
+    // return novels with active true
+    const novels = await Novel.find({ active: true });
     res.status(200).json(novels);
   } catch (error) {
     console.error("Error fetching novels:", error);

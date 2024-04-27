@@ -4,14 +4,11 @@ const Footer = () => {
       <a href="/" className="text-pink-500 hover:text-pink-500 m-4">
         Home
       </a>
-      <a href="/" className="text-white hover:text-pink-500 m-4">
+      <a href="/stories" className="text-white hover:text-pink-500 m-4">
         Stories
       </a>
-      <a href="/" className="text-white hover:text-pink-500 m-4">
-        Contact
-      </a>
-      <a href="/auth" className="text-white hover:text-pink-500 m-4">
-        SignIn
+      <a href="/profile" className="text-white hover:text-pink-500 m-4">
+        Profile
       </a>
     </div>
     <div className="container mx-auto text-center">
