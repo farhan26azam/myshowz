@@ -33,6 +33,7 @@ const Story = () => {
     try {
       const response = await fetch(`${url}/writer/${writerId}`);
       const data = await response.json();
+      console.log("Author data: ", data);
       setAuthor(data);
     } catch (error) {
       console.error("Error fetching author:", error);
@@ -60,7 +61,7 @@ const Story = () => {
         feedback: feedback,
         readerid: user.user._id,
         novelid: id,
-        writerid: author._id,
+        writerid: author?.writer?._id,
       }),
     });
     const data = await response.json();
@@ -68,7 +69,7 @@ const Story = () => {
     if (data.error) {
       toast.error("Error submitting feedback");
     } else {
-      toast.success("Feedback submitted successfully");
+      toast.success(data?.message);
     }
   };
 
@@ -103,20 +104,21 @@ const Story = () => {
             <div className="text-white">
                 <span className="font-bold text-2xl">Story details</span>
 
-                <p>Likes: {story?.likes?.length}</p>
+                <p>Likes: {story?.likes?.length || 0}</p>
             </div>
         </div>
       </div>
       <div className="bg-[var(--brown)] w-full grid grid-cols-2 py-4 px-10">
         <div className="text-white">
           <span className="font-bold text-2xl">About the author</span>
-          {story.writerid && (
+
             <div className="bg-gray-700 w-fit p-4 rounded-lg">
-              <h2>{author?.name}</h2>
-              <p>{author?.email}</p>
-              <p>{author?.score}</p>
+              <h2>Name: {author?.name}</h2>
+                <p>Rank: {author?.rank?.rank.toUpperCase()}</p>
+              <p>Email: {author?.email}</p>
+              <p>Score: {author?.score?.toFixed(1)}</p>
             </div>
-          )}
+          {/*)}*/}
         </div>
         {user?.user?.role === "reader" && (
           <div className="bg-gray-700 p-4 text-white rounded-lg">

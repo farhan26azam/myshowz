@@ -58,7 +58,7 @@ const Navbar = () => {
                       paddingX: '20px'
                     }}
                 >
-                  {user?.name}
+                  {user?.name?.split(' ')[0]}
                 </Button>
 
                 <Avatar alt={user?.name} src={user?.image || ''} sx={{width: 50, height: 50}} onClick={handleClick} />

@@ -35,6 +35,10 @@ const writerSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  rank: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Rank'
+  },
 });
 
 const Writer = mongoose.model('Writer', writerSchema);

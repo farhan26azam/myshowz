@@ -26,6 +26,7 @@ const Reader = require("./models/ReaderSchema");
 const Writer = require("./models/WriterSchema");
 const Genre = require("./models/GenreSchema");
 const Feedback = require("./models/FeedbackSchema");
+const Rank = require("./models/RankSchema");
 
 // Middleware for parsing JSON bodies
 app.use(bodyParser.json());
@@ -150,10 +151,23 @@ app.get("/novel/:id", async (req, res) => {
   }
 });
 
+app.get("/novel/name/:name", async (req, res) => {
+    const { name } = req.params;
+    console.log("NAME: ", req.params || "NO NAME");
+    try {
+        const novel = await Novel.find({ title: name });
+        res.status(200).json(novel);
+    } catch (error) {
+        console.error("Error fetching novel:", error);
+        res.status(500).json({ error: "An error occurred fetching novel" });
+    }
+});
+
 app.get("/writer/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const writer = await Writer.findById(id);
+    const writer = await Writer.findById(id).populate("rank");
+
     res.status(200).json(writer);
   } catch (error) {
     console.error("Error fetching writer:", error);
@@ -168,22 +182,53 @@ app.post("/novel/feedback", async (req, res) => {
     novelid,
     writerid,
   });
-  if (existingFeedback) {
-    return res.status(400).json({ error: "Feedback already exists" });
-  }
-  const newFeedback = new Feedback({ feedback, readerid, novelid, writerid });
-  
-  Writer.findOne({ _id: writerid }).then((writer) => {
+
+
+  Writer.findOne({ _id: writerid }).then(async (writer) => {
     // update writers score to the average of previous score and current feedback
-    if (writer.score === 0 || writer.score === null){
-        newScore = parseInt(feedback);
-    }else{
-      newScore = (parseInt(feedback) + writer.score)/2;
+    let newScore = 5;
+    if (writer.score === 0 || writer.score === null) {
+      newScore = parseInt(feedback);
+    } else {
+      newScore = (parseInt(feedback) + writer.score) / 2;
     }
-    Writer.updateOne({ _id: writerid }, { score: newScore }).then(() =>
-      console.log("Writer score updated successfully")
+
+    console.log(newScore);
+
+    let newRank = "";
+    if (newScore <= 4) {
+      if (newScore > 3) {
+        newRank = await Rank.findOne({rank: "expert"});
+        console.log("expert");
+      } else if (newScore > 2) {
+        newRank = await Rank.findOne({rank: "intermediate"});
+        console.log("intermediate")
+      } else if (newScore > 1) {
+        newRank = await Rank.findOne({rank: "beginner"});
+        console.log("beginner")
+      } else {
+        newRank = await Rank.findOne({rank: "novice"});
+        console.log("novice")
+      }
+    } else {
+      newRank = await Rank.findOne({rank: "master"});
+      console.log("master")
+    }
+
+
+    Writer.updateOne({_id: writerid}, {score: newScore, rank: newRank._id}).then(() =>
+        console.log("Writer score updated successfully")
     );
   });
+
+  if (existingFeedback) {
+    // update feedback
+    existingFeedback.feedback = feedback;
+    return res.status(200).json({ message: "Feedback updated" });
+  }
+  const newFeedback = new Feedback({ feedback, readerid, novelid, writerid });
+
+
   newFeedback
     .save()
     .then(() =>
@@ -224,7 +269,7 @@ app.post("/novel", async (req, res) => {
 
   const existingNovel = await Novel.findOne({ title, versionno });
   if (existingNovel) {
-    return res.status(202).json({ error: "Novel already exists" });
+    return res.status(202).json({ error: `This novel with ${versionno} already exists.` });
   }
 
   const newNovel = new Novel(novelData);
@@ -291,6 +336,31 @@ app.post("/like", async (req, res) => {
         res.status(500).json({ error: "An error occurred liking novel" });
     }
 
+});
+
+// get all ranks
+app.get("/ranks", async (req, res) => {
+  try {
+    const ranks = await Rank.find();
+    res.status(200).json(ranks);
+  } catch (error) {
+    console.error("Error fetching ranks:", error);
+    res.status(500).json({ error: "An error occurred fetching ranks" });
+  }
+});
+
+//get rank by id
+app.get("/rank/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log("ID: ", id);
+    const rank = await Rank.findById(id);
+    console.log("Rank: ", rank)
+    res.status(200).json(rank);
+  } catch (error) {
+    console.error("Error fetching rank:", error);
+    res.status(500).json({ error: "An error occurred fetching rank" });
+  }
 });
 
 async function sendEmailToReaders(emails) {

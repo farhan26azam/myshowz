@@ -6,6 +6,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import {useNavigate, useParams} from "react-router-dom";
 
+function debounce(func, delay) {
+  let debounceTimer;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  };
+}
+
 const WriteNovel = () => {
   // get id from params
   const { id } = useParams();
@@ -60,13 +70,19 @@ const WriteNovel = () => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = debounce(async (e) => {
     const { name, value } = e.target;
+    if(name === "title"){
+      const response = await axios.get(`${url}/novel/name/${value || "none"}`);
+      if (response?.data?.length > 0) {
+        toast.error("Novel with this name already exists");
+      }
+    }
     setNovelData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
+  }, 300);
 
   const validateNovel = () => {
     if (
@@ -86,9 +102,9 @@ const WriteNovel = () => {
     if (!validateNovel()) return;
     let response;
     if(id){
-        response = await axios.put(`${url}/novel/${id}`, {...novelData, active: true});
+        response = await axios.put(`${url}/novel/${id}`, {...novelData, active: true, writerid: user.user._id});
     }else{
-        response = await axios.post(`${url}/novel`, {...novelData, active: true});
+        response = await axios.post(`${url}/novel`, {...novelData, active: true, writerid: user.user._id});
     }
     if(id){
       if (response.status === 200) {

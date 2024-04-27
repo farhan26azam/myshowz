@@ -19,17 +19,16 @@ const MyStoryCard = ({ story }) => {
     <div className="shadow-md shadow-black p-8 text-black rounded-lg h-96 flex flex-col justify-between">
         <div>
 
-            <div className="flex gap-2 justify-between">
-                <div className="">
+            <div className="grid grid-cols-5 gap-2 justify-between w-full">
+                <div className="col-span-4 overflow-hidden">
+                    {story?.title?.length > 20 ?
+
+                    <h2 className="text-2xl font-bold">{story.title?.slice(0, 20)}...</h2>:
                     <h2 className="text-2xl font-bold">{story.title}</h2>
+                }
                 </div>
 
-                <div className="flex gap-1">
-                <div
-                    className="h-10 flex gap-1 items-center text-2xl bg-[var(--brown)] px-2 py-1 text-white rounded-lg">
-                    <Favorite/>
-                    {story?.likes?.length}
-                </div>
+                <div className="flex gap-1 col-span-1">
                 <div
                     className="h-10 flex gap-1 items-center text-2xl bg-[var(--brown)] px-2 py-1 text-white rounded-lg">
                     <ArticleIcon/>
@@ -44,40 +43,45 @@ const MyStoryCard = ({ story }) => {
         </div>
 
         <div className="flex gap-2 mb-0">
+            <div
+                className="flex gap-1 items-center text-2xl bg-[var(--brown)] px-2 py-1 text-white rounded-lg">
+                <Favorite/>
+                {story?.likes?.length || 0}
+            </div>
             {
                 story?.active ?
-                <button
-          className="bg-[var(--brown)] text-white rounded-lg px-4 py-2"
-          onClick={() => navigate(`/story/${story._id}`)}
-        >
-          Read
-        </button>
+                    <button
+                        className="bg-[var(--brown)] text-white rounded-lg px-4 py-2"
+                        onClick={() => navigate(`/story/${story._id}`)}
+                    >
+                        Read
+                    </button>
                     :
                     <button
-                onClick={
-                ()=>navigate(`/write/${story._id}`)
-            }
-            className="h-10 flex gap-1 items-center bg-white border-2 border-[var(--brown)] px-2 py-1 text-[var(--brown)] rounded-lg">
+                        onClick={
+                            () => navigate(`/write/${story._id}`)
+                        }
+                        className="h-10 flex gap-1 items-center bg-white border-2 border-[var(--brown)] px-2 py-1 text-[var(--brown)] rounded-lg">
                         Continue Writing
-            <DrawIcon
-                sx={{
-                    color: 'var(--brown)'
-                }}/>
-        </button>
+                        <DrawIcon
+                            sx={{
+                                color: 'var(--brown)'
+                            }}/>
+                    </button>
             }
-          <button
-            className="bg-[var(--brown)] text-white rounded-lg px-4 py-2"
-            onClick={() => navigate(`/write/${story._id}`)}
+            <button
+                className="bg-[var(--brown)] text-white rounded-lg px-4 py-2"
+                onClick={() => navigate(`/write/${story._id}`)}
             >
-              <EditIcon />
-          </button>
-          <button
-            className="bg-white border-[var(--brown)] border-2 text-[var(--brown)] rounded-lg px-4 py-2"
-            onClick={() => setDeleteClicked(true)}
-            >
-              <DeleteIcon/>
+                <EditIcon/>
             </button>
-      </div>
+            <button
+                className="bg-white border-[var(--brown)] border-2 text-[var(--brown)] rounded-lg px-4 py-2"
+                onClick={() => setDeleteClicked(true)}
+            >
+                <DeleteIcon/>
+            </button>
+        </div>
 
         {
             deleteClicked && (
