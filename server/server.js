@@ -187,11 +187,11 @@ app.post("/novel/feedback", async (req, res) => {
   Writer.findOne({ _id: writerid }).then(async (writer) => {
     // update writers score to the average of previous score and current feedback
     let newScore = 5;
-    if(writer.score){
-      if(writer.score===0){
+    if(writer){
+      if(writer?.score===0){
         newScore = parseInt(feedback);
       }else{
-        newScore = (parseInt(feedback) + writer.score) / 2;
+        newScore = (parseInt(feedback) + writer?.score) / 2;
       }
     }else{
       newScore = parseInt(feedback);

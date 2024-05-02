@@ -61,7 +61,7 @@ const Story = () => {
         feedback: feedback,
         readerid: user.user._id,
         novelid: id,
-        writerid: author?.writer?._id,
+        writerid: author?._id,
       }),
     });
     const data = await response.json();
