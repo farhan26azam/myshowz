@@ -70,19 +70,13 @@ const WriteNovel = () => {
     }
   };
 
-  const handleChange = debounce(async (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name === "title"){
-      const response = await axios.get(`${url}/novel/name/${value || "none"}`);
-      if (response?.data?.length > 0) {
-        toast.error("Novel with this name already exists");
-      }
-    }
     setNovelData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  }, 300);
+  };
 
   const validateNovel = () => {
     if (
